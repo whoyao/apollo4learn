@@ -47,7 +47,7 @@ namespace apollo {
 namespace common {
 namespace adapter {
 
-using ChassisAdapter = Adapter<canbus::Chassis>;
+using ChassisAdapter = Adapter<canbus::Chassis>;    //模板类，canbus::Chassis类型的Adapter
 using ChassisDetailAdapter = Adapter<canbus::ChassisDetail>;
 using ControlCommandAdapter = Adapter<control::ControlCommand>;
 using GpsAdapter = Adapter<apollo::localization::Gps>;

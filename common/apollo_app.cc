@@ -33,7 +33,7 @@ void ApolloApp::ReportModuleStatus(
     const apollo::hmi::ModuleStatus::Status status) {
   status_.set_name(Name());
   status_.set_status(status);
-  hmi::HMIStatusHelper::ReportModuleStatus(status_);
+  hmi::HMIStatusHelper::ReportModuleStatus(status_);      // TODO:展开阅读此函数
 }
 
 int ApolloApp::Spin() {

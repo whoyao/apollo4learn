@@ -52,10 +52,10 @@ Status Control::Init() {
 
   AdapterManager::Init(FLAGS_adapter_config_filename);
 
-  apollo::common::monitor::MonitorBuffer buffer(&monitor_);
+  apollo::common::monitor::MonitorBuffer buffer(&monitor_);    // TODO：弄清此函数作用
 
   // set controller
-  if (!controller_agent_.Init(&control_conf_).ok()) {
+  if (!controller_agent_.Init(&control_conf_).ok()) {         // TODO： control_agent作用？
     std::string error_msg = "Control init controller failed! Stopping...";
     buffer.ERROR(error_msg);
     return Status(ErrorCode::CONTROL_INIT_ERROR, error_msg);
@@ -63,19 +63,19 @@ Status Control::Init() {
 
   // lock it in case for after sub, init_vehicle not ready, but msg trigger
   // come
-  CHECK(AdapterManager::GetLocalization())
-      << "Localization is not initialized.";
+  CHECK(AdapterManager::GetLocalization())     //Adapter<apollo::localization::LocalizationEstimate>;
+      << "Localization is not initialized.";    //各 using 定义在message_adapters.h中
 
-  CHECK(AdapterManager::GetChassis()) << "Chassis is not initialized.";
+  CHECK(AdapterManager::GetChassis()) << "Chassis is not initialized.";  //Adapter<canbus::Chassis>
 
-  CHECK(AdapterManager::GetPlanning()) << "Planning is not initialized.";
+  CHECK(AdapterManager::GetPlanning()) << "Planning is not initialized.";   //Adapter<planning::ADCTrajectory>;
 
-  CHECK(AdapterManager::GetPad()) << "Pad is not initialized.";
+  CHECK(AdapterManager::GetPad()) << "Pad is not initialized.";  //Adapter<control::PadMessage>;
 
-  CHECK(AdapterManager::GetControlCommand())
+  CHECK(AdapterManager::GetControlCommand())   //Adapter<control::ControlCommand>
       << "ControlCommand publisher is not initialized.";
 
-  AdapterManager::AddPadCallback(&Control::OnPad, this);
+  AdapterManager::AddPadCallback(&Control::OnPad, this);  //TODO: 需要进一步验证
   AdapterManager::AddMonitorCallback(&Control::OnMonitor, this);
 
   return Status::OK();
@@ -106,7 +106,7 @@ Status Control::Start() {
   return Status::OK();
 }
 
-void Control::OnPad(const PadMessage &pad) {
+void Control::OnPad(const PadMessage &pad) {        //TODO:
   pad_msg_ = pad;
   ADEBUG << "Received Pad Msg:" << pad.DebugString();
   AERROR_IF(!pad_msg_.has_action()) << "pad message check failed!";

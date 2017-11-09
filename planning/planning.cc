@@ -135,7 +135,7 @@ Status Planning::Start() {
     ReferenceLineProvider::instance()->Start();
   }
   timer_ = AdapterManager::CreateTimer(
-      ros::Duration(1.0 / FLAGS_planning_loop_rate), &Planning::OnTimer, this);
+      ros::Duration(1.0 / FLAGS_planning_loop_rate), &Planning::OnTimer, this); //设置Ontimer频率
   return Status::OK();
 }
 

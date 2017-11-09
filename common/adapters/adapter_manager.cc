@@ -49,11 +49,11 @@ void AdapterManager::Init(const AdapterManagerConfig &configs) {
     instance()->node_handle_.reset(new ros::NodeHandle());
   }
 
-  for (const auto &config : configs.config()) {
+  for (const auto &config : configs.config()) {           //以下函数均通过REGISTER_ADAPTER生成
     switch (config.type()) {
       case AdapterConfig::POINT_CLOUD:
         EnablePointCloud(FLAGS_pointcloud_topic, config.mode(),
-                         config.message_history_limit());
+                         config.message_history_limit()); //构造各Adapter，订阅topic，初始化publisher，push_back observers_队列
         break;
       case AdapterConfig::GPS:
         EnableGps(FLAGS_gps_topic, config.mode(),
