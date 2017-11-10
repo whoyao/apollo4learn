@@ -76,6 +76,30 @@ Status Control::Init() {
       << "ControlCommand publisher is not initialized.";
 
   AdapterManager::AddPadCallback(&Control::OnPad, this);  //TODO: 需要进一步验证
+  /*
+    AdapterManager仅有一个实例，各模块均是其成员
+
+    函数调用过程如下：
+
+    static void AddPadCallback(PadAdapter::Callback callback) {          
+    CHECK(instance()->Pad_)                                                 
+        << "Initialize adapter before setting callback";                       
+    instance()->Pad_->AddCallback(callback);  //Adapter<control::PadMessage> \
+                                             //     Adapter->AddCallback    
+                                             // receive_callbacks_.push_back(callback);                       
+    }                                                                            
+    template <class T>                                                           
+    static void AddPadCallback(                                             
+        void (T::*fp)(const PadAdapter::DataType &data), T *obj) {            
+      PadCallback(std::bind(fp, obj, std::placeholders::_1));            
+    }   
+
+    void (T::*fp)(const PadAdapter::DataType &data) 指参数为const PadAdapter::DataType &data \
+                            的函数指针
+    std::bind(fp, obj, std::placeholders::_1 为PadAdapter::Callback callback，因此callback带有一个参数
+
+  */
+
   AdapterManager::AddMonitorCallback(&Control::OnMonitor, this);
 
   return Status::OK();
